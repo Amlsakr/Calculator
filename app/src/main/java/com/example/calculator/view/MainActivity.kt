@@ -1,5 +1,6 @@
 package com.example.calculator.view
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,6 +23,14 @@ class MainActivity : AppCompatActivity()  {
         calculatorViewModel = ViewModelProvider(this).get(CalculatorViewModel::class.java)
         calculatorViewModel.resultMutableLiveData.observe(this , Observer<Double>{
             result-> mainActivityBinding.resultTextView.text = result.toString()
+            mainActivityBinding.firstOperandEditText.text.clear()
+            mainActivityBinding.secondOperandEditText.text.clear()
+            mainActivityBinding.addButton.background = resources.getDrawable(R.drawable.button_normal)
+            mainActivityBinding.addButton.setTextColor(resources.getColor(R.color.white))
+//            mainActivityBinding.addButton.isSelected = false
+//            mainActivityBinding.minusButton.isSelected = false
+//            mainActivityBinding.multiplyButton.isSelected = false
+//            mainActivityBinding.divideButton.isSelected = false
         })
 
     }
@@ -31,12 +40,28 @@ class MainActivity : AppCompatActivity()  {
         var secondOperand =mainActivityBinding.secondOperandEditText.text.toString().toDouble()
         calculatorViewModel.calculateResult(firstOperand , secondOperand , operation)
     }
+
     fun getOperation(view: View) {
         when(view.id){
-            R.id.addButton -> operation = '+'
-            R.id.multiplyButton -> operation = '*'
-            R.id.divideButton -> operation = '/'
-            R.id.minusButton -> operation = '-'
+            R.id.addButton -> {
+                operation = '+'
+                mainActivityBinding.addButton.background = resources.getDrawable(R.drawable.button_pressed)
+                mainActivityBinding.addButton.setTextColor(resources.getColor(R.color.black))
+
+            }
+            R.id.multiplyButton -> {
+                operation = '*'
+                mainActivityBinding.multiplyButton.isSelected = true
+            }
+            R.id.divideButton -> {
+                operation = '/'
+                mainActivityBinding.divideButton.isSelected = true
+            }
+            R.id.minusButton -> {
+                operation = '-'
+                mainActivityBinding.minusButton.isSelected = true
+            }
+
 
         }
     }
