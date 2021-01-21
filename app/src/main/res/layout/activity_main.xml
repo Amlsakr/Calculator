@@ -113,5 +113,41 @@
         app:layout_constraintStart_toEndOf="@+id/divideButton"
         app:layout_constraintTop_toBottomOf="@+id/minusButton" />
 
+    <Button
+        android:id="@+id/undoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:text="Undo"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/equalButton"
+        app:layout_constraintTop_toBottomOf="@+id/multiplyButton" />
+
+    <Button
+        android:id="@+id/redoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="Redo"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divideButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/redoButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

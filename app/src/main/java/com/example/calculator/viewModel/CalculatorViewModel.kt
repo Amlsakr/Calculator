@@ -19,8 +19,9 @@ class CalculatorViewModel : ViewModel()  {
         return result
     }
 
-    fun postResultToLiveData (firstOperand : Double , secondOperand : Double , operation : Char){
+    fun postResultToLiveData (firstOperand : Double , secondOperand : Double , operation : Char) : MutableLiveData<Double>{
         var result = calculateResult(firstOperand,secondOperand,operation)
         resultMutableLiveData.postValue(result)
+        return resultMutableLiveData
     }
 }
