@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity()  {
     fun equal(view: View) {
         var firstOperand =mainActivityBinding.firstOperandEditText.text.toString().toDouble()
         var secondOperand =mainActivityBinding.secondOperandEditText.text.toString().toDouble()
-        calculatorViewModel.calculateResult(firstOperand , secondOperand , operation)
+        calculatorViewModel.postResultToLiveData(firstOperand , secondOperand , operation)
     }
 
     fun getOperation(view: View) {

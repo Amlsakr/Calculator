@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 class CalculatorViewModel : ViewModel()  {
     var resultMutableLiveData : MutableLiveData<Double> = MutableLiveData()
 
-    fun calculateResult (firstOperand : Double , secondOperand : Double , operation : Char) {
+    fun calculateResult (firstOperand : Double , secondOperand : Double , operation : Char) : Double {
         var result = 0.0
         when(operation){
             '+' -> result = firstOperand + secondOperand
@@ -15,7 +15,12 @@ class CalculatorViewModel : ViewModel()  {
             '/' -> result = firstOperand / secondOperand
 
         }
-        resultMutableLiveData.postValue(result)
 
+        return result
+    }
+
+    fun postResultToLiveData (firstOperand : Double , secondOperand : Double , operation : Char){
+        var result = calculateResult(firstOperand,secondOperand,operation)
+        resultMutableLiveData.postValue(result)
     }
 }
