@@ -4,23 +4,36 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.calculator.R
 import com.example.calculator.databinding.ActivityMainBinding
+import com.example.calculator.view.adapter.HistoryAdapter
 import com.example.calculator.viewModel.CalculatorViewModel
 
 class MainActivity : AppCompatActivity()  {
     private lateinit var mainActivityBinding : ActivityMainBinding
-    private lateinit var calculatorViewModel : CalculatorViewModel
+    private val calculatorViewModel : CalculatorViewModel  by viewModels()
+    private lateinit var historyAdapter: HistoryAdapter
     var operation = ' '
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainActivityBinding.root
         setContentView(view)
+        historyAdapter = HistoryAdapter()
+        calculatorViewModel.postHistoryToLiveData()
+        mainActivityBinding.recyclerView.layoutManager = LinearLayoutManager(this ,LinearLayoutManager.VERTICAL ,false)
+        mainActivityBinding.recyclerView.adapter = historyAdapter
+        calculatorViewModel.calculationHistoryMutableLiveData.observe(this , Observer {
+            if(it.size > 0){
+              historyAdapter.historyItems = it
+                historyAdapter.notifyDataSetChanged()
+            }
+        })
 
-        calculatorViewModel = ViewModelProvider(this).get(CalculatorViewModel::class.java)
         calculatorViewModel.resultMutableLiveData.observe(this , Observer<Double>{
             result-> mainActivityBinding.resultTextView.text = result.toString()
             mainActivityBinding.firstOperandEditText.text.clear()

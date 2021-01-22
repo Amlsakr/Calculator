@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.calculator.databinding.RecyclerviewItemBinding
 
-class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter (): RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    var historyItems  = mutableListOf<String>()
+    var historyItems  = ArrayList<String>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val recyclerItemViewBinding =
