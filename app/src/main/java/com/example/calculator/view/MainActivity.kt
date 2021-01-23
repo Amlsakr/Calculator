@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -22,9 +23,6 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var mainActivityBinding : ActivityMainBinding
     private val calculatorViewModel : CalculatorViewModel  by viewModels()
     private lateinit var historyAdapter: HistoryAdapter
-    var operation = ' '
-    var index = 0
-    var operationList = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -34,13 +32,14 @@ class MainActivity : AppCompatActivity()  {
         calculatorViewModel.postHistoryToLiveData()
         mainActivityBinding.recyclerView.layoutManager = LinearLayoutManager(this ,LinearLayoutManager.VERTICAL ,false)
         mainActivityBinding.recyclerView.adapter = historyAdapter
-        mainActivityBinding.firstOperandEditText.addTextChangedListener(object : TextWatcher{
+        mainActivityBinding.firstOperandEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-               operationList.add(s.toString())
+                Log.e("et", s.toString() + "start" + start + "before" + before + "count" + count)
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity()  {
             }
         })
 
-        calculatorViewModel.resultMutableLiveData.observe(this , Observer<Double>{
+        calculatorViewModel.resultMutableLiveData.observe(this , Observer<Int>{
             result-> mainActivityBinding.resultTextView.text = result.toString()
             mainActivityBinding.firstOperandEditText.text.clear()
             mainActivityBinding.equalButton.isEnabled = false
@@ -72,8 +71,8 @@ class MainActivity : AppCompatActivity()  {
 
     fun equal(view: View) {
         if (mainActivityBinding.firstOperandEditText.text.toString().length > 0 ) {
-            var firstOperand = mainActivityBinding.firstOperandEditText.text.toString().toDouble()
-            calculatorViewModel.postResultToLiveData(firstOperand, 0.0, operation)
+            var firstOperand = mainActivityBinding.firstOperandEditText.text.toString()
+            calculatorViewModel.postResultToLiveData(firstOperand)
         }else {
             Toast.makeText(this , "Please Enter Operand" , Toast.LENGTH_SHORT).show()
         }
@@ -85,50 +84,50 @@ class MainActivity : AppCompatActivity()  {
     fun getOperation(view: View) {
         when(view.id){
             R.id.addButton -> {
-                operation = '+'
+        //        operation = '+'
                 mainActivityBinding.addButton.isSelected = true
-                if (!operationList.isEmpty()) {
-                    if (operationList.get(operationList.size - 1) != getString(R.string.add)) {
+//                if (!operationList.isEmpty()) {
+//                    if (operationList.get(operationList.size - 1) != getString(R.string.add)) {
                         var input = mainActivityBinding.firstOperandEditText.text.toString()
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.add))
-                        operationList.add(getString(R.string.add))
-                    }
+                //        operationList.add(getString(R.string.add))
+               //     }
 
 
-                }
+             //   }
             }
             R.id.multiplyButton -> {
-                operation = '*'
+            //    operation = '*'
                 mainActivityBinding.multiplyButton.isSelected = true
-                if (!operationList.isEmpty()) {
-                    if (operationList.get(operationList.size - 1) != getString(R.string.multiply)) {
+//                if (!operationList.isEmpty()) {
+//                    if (operationList.get(operationList.size - 1) != getString(R.string.multiply)) {
                         var input = mainActivityBinding.firstOperandEditText.text.toString()
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.multiply))
-                        operationList.add(getString(R.string.multiply))
-                    }
-                }
+                     //   operationList.add(getString(R.string.multiply))
+                  //  }
+              //  }
             }
             R.id.divideButton -> {
-                operation = '/'
+             //   operation = '/'
                 mainActivityBinding.divideButton.isSelected = true
-                if (!operationList.isEmpty()) {
-                    if (operationList.get(operationList.size - 1) != getString(R.string.divide)) {
+//                if (!operationList.isEmpty()) {
+//                    if (operationList.get(operationList.size - 1) != getString(R.string.divide)) {
                         var input = mainActivityBinding.firstOperandEditText.text.toString()
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.divide))
-                        operationList.add(getString(R.string.divide))
-                    }
-                }
+//                        operationList.add(getString(R.string.divide))
+//                    }
+//                }
             }
             R.id.minusButton -> {
-                operation = '-'
+               // operation = '-'
                 mainActivityBinding.minusButton.isSelected = true
-                if (!operationList.isEmpty()) {
-                    if (operationList.get(operationList.size - 1) != getString(R.string.minus)) {
+//                if (!operationList.isEmpty()) {
+//                    if (operationList.get(operationList.size - 1) != getString(R.string.minus)) {
                         var input = mainActivityBinding.firstOperandEditText.text.toString()
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.minus))
-                        operationList.add(getString(R.string.minus))
-                    }
-                }
+                       // operationList.add(getString(R.string.minus))
+//                    }
+//                }
             }
 
 
@@ -142,6 +141,16 @@ class MainActivity : AppCompatActivity()  {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(mainActivityBinding.firstOperandEditText.windowToken, 0)
 
+    }
+
+    fun checkIfLastItemIsNumberOrOperator(s:String) : Boolean{
+        if(s == "+" || s == "-"
+                    || s== "*" || s == "/"){
+                return false
+            }
+
+
+        return true
     }
 
 

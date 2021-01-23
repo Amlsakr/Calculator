@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class CalculatorViewModel(application: Application) : AndroidViewModel(application)  {
-    var resultMutableLiveData : MutableLiveData<Double> = MutableLiveData()
+    var resultMutableLiveData : MutableLiveData<Int> = MutableLiveData()
     var calculationHistoryMutableLiveData : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var evaluateString = EvaluateString()
 
     val sharedPreferenceKey = "CalculatorHistory"
     val calculatorHistoryList = "calculatorHistoryList"
@@ -16,23 +17,10 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
     var editor = sharedpreferences.edit();
 
 
-    fun calculateResult (firstOperand : Double , secondOperand : Double , operation : Char) : Double {
-        var result = 0.0
-        when(operation){
-            '+' -> result = firstOperand + secondOperand
-            '-' -> result = firstOperand - secondOperand
-            '*' -> result = firstOperand * secondOperand
-            '/' -> result = firstOperand / secondOperand
-
-        }
-
-        return result
-    }
-
-    fun postResultToLiveData (firstOperand : Double , secondOperand : Double , operation : Char) : MutableLiveData<Double>{
-        var result = calculateResult(firstOperand,secondOperand,operation)
+    fun postResultToLiveData (expression :String) : MutableLiveData<Int>{
+        var result = evaluateString.evaluate(expression)
         var list = reterieveListFromSharedPreference()
-        list.add(firstOperand.toString() + " " + operation + " "+ secondOperand.toString() + " = "+ result.toString())
+        list.add(expression + " = "+ result.toString())
         var set = HashSet<String>()
         set.addAll(list)
         editor.putStringSet(calculatorHistoryList,set)
