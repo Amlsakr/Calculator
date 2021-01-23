@@ -78,14 +78,20 @@ class MainActivity : AppCompatActivity()  {
             R.id.multiplyButton -> {
                 operation = '*'
                 mainActivityBinding.multiplyButton.isSelected = true
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.firstOperandEditText.setText( input + "*")
             }
             R.id.divideButton -> {
                 operation = '/'
                 mainActivityBinding.divideButton.isSelected = true
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.firstOperandEditText.setText( input + "/")
             }
             R.id.minusButton -> {
                 operation = '-'
                 mainActivityBinding.minusButton.isSelected = true
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.firstOperandEditText.setText( input + "-")
             }
 
 
