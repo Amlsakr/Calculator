@@ -45,13 +45,15 @@ class MainActivity : AppCompatActivity() {
                 mainActivityBinding.firstOperandEditText.setSelection(mainActivityBinding.firstOperandEditText.text.toString().length);
                 if (mainActivityBinding.firstOperandEditText.text.toString().length == 0) {
                     mainActivityBinding.equalButton.isEnabled = false
+                    mainActivityBinding.undoButton.isEnabled = false
+                     mainActivityBinding.redoButton.isEnabled = false
                 }
                 if (mainActivityBinding.firstOperandEditText.text.toString().length >= 3) {
                     mainActivityBinding.undoButton.isEnabled = true
                     mainActivityBinding.redoButton.isEnabled = true
                 } else {
                     mainActivityBinding.undoButton.isEnabled = false
-                    mainActivityBinding.redoButton.isEnabled = false
+                   // mainActivityBinding.redoButton.isEnabled = false
                 }
 
             }
