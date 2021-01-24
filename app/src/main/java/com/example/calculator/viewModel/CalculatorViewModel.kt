@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class CalculatorViewModel(application: Application) : AndroidViewModel(application)  {
-    var resultMutableLiveData : MutableLiveData<Int> = MutableLiveData()
+    var resultMutableLiveData : MutableLiveData<Double> = MutableLiveData()
     var calculationHistoryMutableLiveData : MutableLiveData<ArrayList<String>> = MutableLiveData()
     var evaluateString = EvaluateString()
 
@@ -17,8 +17,8 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
     var editor = sharedpreferences.edit();
 
 
-    fun postResultToLiveData (expression :String) : MutableLiveData<Int>{
-        var result = evaluateString.evaluate(expression)
+    fun postResultToLiveData (expression :String) : MutableLiveData<Double>{
+        var result = evaluateString.getResult(expression)
         var list = reterieveListFromSharedPreference()
         list.add(expression + " = "+ result.toString())
         var set = HashSet<String>()

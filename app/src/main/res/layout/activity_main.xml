@@ -104,6 +104,7 @@
         android:text="@string/open_bracket"
         android:textColor="@color/white"
         android:background="@drawable/button"
+        android:onClick="onBracketClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/multiplyButton"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -146,6 +147,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/undo"
+        android:onClick="undo"
         android:background="@drawable/button"
         android:textColor="@color/white"
         android:textAllCaps="false"
@@ -164,6 +166,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@drawable/button"
+        android:onClick="onBracketClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/undoButton"
         app:layout_constraintTop_toBottomOf="@+id/openBracket" />
@@ -176,6 +179,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/redo"
         android:background="@drawable/button"
+        android:onClick="redo"
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:textSize="16sp"

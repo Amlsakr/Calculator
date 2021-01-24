@@ -1,20 +1,16 @@
 package com.example.calculator.view
 
-import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.Selection
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.calculator.R
 import com.example.calculator.databinding.ActivityMainBinding
@@ -25,6 +21,8 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var mainActivityBinding : ActivityMainBinding
     private val calculatorViewModel : CalculatorViewModel  by viewModels()
     private lateinit var historyAdapter: HistoryAdapter
+    var numberOfUndos  = 0
+    var undoArrayList  =  ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,7 +30,11 @@ class MainActivity : AppCompatActivity()  {
         setContentView(view)
         historyAdapter = HistoryAdapter()
         calculatorViewModel.postHistoryToLiveData()
-        mainActivityBinding.recyclerView.layoutManager = LinearLayoutManager(this ,LinearLayoutManager.VERTICAL ,false)
+        mainActivityBinding.recyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         mainActivityBinding.recyclerView.adapter = historyAdapter
         mainActivityBinding.firstOperandEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity()  {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 mainActivityBinding.firstOperandEditText.setSelection(mainActivityBinding.firstOperandEditText.text.toString().length);
-                if(mainActivityBinding.firstOperandEditText.text.toString().length == 0){
+                if (mainActivityBinding.firstOperandEditText.text.toString().length == 0) {
                     mainActivityBinding.equalButton.isEnabled = false
                 }
 
@@ -53,15 +55,15 @@ class MainActivity : AppCompatActivity()  {
             }
 
         })
-        calculatorViewModel.calculationHistoryMutableLiveData.observe(this , Observer {
-            if(it.size > 0){
-              historyAdapter.historyItems = it
+        calculatorViewModel.calculationHistoryMutableLiveData.observe(this, Observer {
+            if (it.size > 0) {
+                historyAdapter.historyItems = it
                 historyAdapter.notifyDataSetChanged()
             }
         })
 
-        calculatorViewModel.resultMutableLiveData.observe(this , Observer<Int>{
-            result-> mainActivityBinding.resultTextView.text = result.toString()
+        calculatorViewModel.resultMutableLiveData.observe(this, Observer<Double> { result ->
+            mainActivityBinding.resultTextView.text = result.toString()
             mainActivityBinding.firstOperandEditText.text.clear()
             mainActivityBinding.equalButton.isEnabled = false
             mainActivityBinding.addButton.isSelected = false
@@ -77,9 +79,11 @@ class MainActivity : AppCompatActivity()  {
     fun equal(view: View) {
         var input = mainActivityBinding.firstOperandEditText.text.toString()
         if (input.length > 0) {
-            if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
+            if (isExpressionCorrect(input)) {
                 var firstOperand = mainActivityBinding.firstOperandEditText.text.toString()
                 calculatorViewModel.postResultToLiveData(firstOperand)
+                numberOfUndos = 0
+                undoArrayList.clear()
             } else {
                 Toast.makeText(this, "Please Enter Valid Expression", Toast.LENGTH_SHORT).show()
             }
@@ -98,7 +102,7 @@ class MainActivity : AppCompatActivity()  {
                 mainActivityBinding.multiplyButton.isSelected = false
                 mainActivityBinding.divideButton.isSelected = false
                 var input = mainActivityBinding.firstOperandEditText.text.toString()
-                if(input.length> 0) {
+                if (input.length > 0) {
                     if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.add))
                     }
@@ -110,7 +114,7 @@ class MainActivity : AppCompatActivity()  {
                 mainActivityBinding.minusButton.isSelected = false
                 mainActivityBinding.divideButton.isSelected = false
                 var input = mainActivityBinding.firstOperandEditText.text.toString()
-                if(input.length> 0) {
+                if (input.length > 0) {
                     if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.multiply))
                     }
@@ -122,7 +126,7 @@ class MainActivity : AppCompatActivity()  {
                 mainActivityBinding.addButton.isSelected = false
                 mainActivityBinding.minusButton.isSelected = false
                 var input = mainActivityBinding.firstOperandEditText.text.toString()
-                if(input.length> 0) {
+                if (input.length > 0) {
                     if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.divide))
                     }
@@ -134,7 +138,7 @@ class MainActivity : AppCompatActivity()  {
                 mainActivityBinding.multiplyButton.isSelected = false
                 mainActivityBinding.addButton.isSelected = false
                 var input = mainActivityBinding.firstOperandEditText.text.toString()
-                if(input.length> 0) {
+                if (input.length > 0) {
                     if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.minus))
                     }
@@ -151,7 +155,7 @@ class MainActivity : AppCompatActivity()  {
         imm.hideSoftInputFromWindow(mainActivityBinding.firstOperandEditText.windowToken, 0)
 
     }
-    fun checkIfLastItemIsNumberOrOperator(s:String) : Boolean{
+    fun checkIfLastItemIsNumberOrOperator(s: String) : Boolean{
         if(s == "+" || s == "-"
                     || s== "*" || s == "/"){
                 return false
@@ -163,10 +167,36 @@ class MainActivity : AppCompatActivity()  {
 
     fun onClearClick(view: View) {
         mainActivityBinding.firstOperandEditText.text.clear()
+        numberOfUndos = 0
+        undoArrayList.clear()
     }
 
-    fun onNumberClick(view: View) {}
+    fun onBracketClick(view: View) {
+        val button: AppCompatButton = view as AppCompatButton
+        var input = mainActivityBinding.firstOperandEditText.text.toString()
+        mainActivityBinding.firstOperandEditText.setText(input + button.text)
+    }
 
+    fun isExpressionCorrect(expression: String): Boolean {
+        return expression.matches("(([()]*[+*×÷/-])?[()]*(\\d+(\\.\\d+)?)[()]*)+".toRegex())
+    }
+
+    fun undo(view: View) {
+        var input = mainActivityBinding.firstOperandEditText.text.toString()
+        if (isExpressionCorrect(input) && input.length > 2){
+            mainActivityBinding.firstOperandEditText.setText(input.substring(0 ,input.length-2))
+            numberOfUndos++
+            undoArrayList.add(input.substring(input.length-2))
+        }
+    }
+    fun redo(view: View) {
+        var input = mainActivityBinding.firstOperandEditText.text.toString()
+        if (numberOfUndos > 0){
+            numberOfUndos--
+            mainActivityBinding.firstOperandEditText.setText(input + undoArrayList.get(undoArrayList.size - 1))
+            undoArrayList.removeAt(undoArrayList.size - 1)
+        }
+    }
 
 }
 
