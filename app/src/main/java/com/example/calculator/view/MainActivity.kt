@@ -17,12 +17,12 @@ import com.example.calculator.databinding.ActivityMainBinding
 import com.example.calculator.view.adapter.HistoryAdapter
 import com.example.calculator.viewModel.CalculatorViewModel
 
-class MainActivity : AppCompatActivity()  {
-    private lateinit var mainActivityBinding : ActivityMainBinding
-    private val calculatorViewModel : CalculatorViewModel  by viewModels()
+class MainActivity : AppCompatActivity() {
+    private lateinit var mainActivityBinding: ActivityMainBinding
+    private val calculatorViewModel: CalculatorViewModel by viewModels()
     private lateinit var historyAdapter: HistoryAdapter
-    var numberOfUndos  = 0
-    var undoArrayList  =  ArrayList<String>()
+    var numberOfUndos = 0
+    var undoArrayList = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity()  {
         historyAdapter = HistoryAdapter()
         calculatorViewModel.postHistoryToLiveData()
         mainActivityBinding.recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.VERTICAL,
-            false
+                this,
+                LinearLayoutManager.VERTICAL,
+                false
         )
         mainActivityBinding.recyclerView.adapter = historyAdapter
         mainActivityBinding.firstOperandEditText.addTextChangedListener(object : TextWatcher {
@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity()  {
                 if (mainActivityBinding.firstOperandEditText.text.toString().length == 0) {
                     mainActivityBinding.equalButton.isEnabled = false
                 }
-                if (mainActivityBinding.firstOperandEditText.text.toString().length  >= 3) {
+                if (mainActivityBinding.firstOperandEditText.text.toString().length >= 3) {
                     mainActivityBinding.undoButton.isEnabled = true
                     mainActivityBinding.redoButton.isEnabled = true
-                }else {
+                } else {
                     mainActivityBinding.undoButton.isEnabled = false
                     mainActivityBinding.redoButton.isEnabled = false
                 }
@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity()  {
         })
 
 
-
     }
 
     fun equal(view: View) {
@@ -94,7 +93,7 @@ class MainActivity : AppCompatActivity()  {
             } else {
                 Toast.makeText(this, "Please Enter Valid Expression", Toast.LENGTH_SHORT).show()
             }
-        }else {
+        } else {
             Toast.makeText(this, "Please Enter  Expression", Toast.LENGTH_SHORT).show()
         }
         mainActivityBinding.equalButton.isEnabled = false
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity()  {
     }
 
     fun getOperation(view: View) {
-        when(view.id){
+        when (view.id) {
             R.id.addButton -> {
                 mainActivityBinding.addButton.isSelected = true
                 mainActivityBinding.minusButton.isSelected = false
@@ -157,19 +156,19 @@ class MainActivity : AppCompatActivity()  {
     }
 
 
-    fun hideKeyboard(){
+    fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(mainActivityBinding.firstOperandEditText.windowToken, 0)
 
     }
-    fun checkIfLastItemIsNumberOrOperator(s: String) : Boolean{
-        if(s == "+" || s == "-"
-                    || s== "*" || s == "/"){
-                return false
-            }
+
+    fun checkIfLastItemIsNumberOrOperator(s: String): Boolean {
+        if (s == "+" || s == "-"
+                || s == "*" || s == "/") {
+            return false
+        }
         return true
     }
-
 
 
     fun onClearClick(view: View) {
@@ -177,6 +176,7 @@ class MainActivity : AppCompatActivity()  {
         numberOfUndos = 0
         undoArrayList.clear()
     }
+
 
     fun onBracketClick(view: View) {
         val button: AppCompatButton = view as AppCompatButton
@@ -190,15 +190,16 @@ class MainActivity : AppCompatActivity()  {
 
     fun undo(view: View) {
         var input = mainActivityBinding.firstOperandEditText.text.toString()
-        if (isExpressionCorrect(input) && input.length > 2){
-            mainActivityBinding.firstOperandEditText.setText(input.substring(0 ,input.length-2))
+        if (isExpressionCorrect(input) && input.length > 2) {
+            mainActivityBinding.firstOperandEditText.setText(input.substring(0, input.length - 2))
             numberOfUndos++
-            undoArrayList.add(input.substring(input.length-2))
+            undoArrayList.add(input.substring(input.length - 2))
         }
     }
+
     fun redo(view: View) {
         var input = mainActivityBinding.firstOperandEditText.text.toString()
-        if (numberOfUndos > 0){
+        if (numberOfUndos > 0) {
             numberOfUndos--
             mainActivityBinding.firstOperandEditText.setText(input + undoArrayList.get(undoArrayList.size - 1))
             undoArrayList.removeAt(undoArrayList.size - 1)
