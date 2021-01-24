@@ -46,6 +46,13 @@ class MainActivity : AppCompatActivity()  {
                 if (mainActivityBinding.firstOperandEditText.text.toString().length == 0) {
                     mainActivityBinding.equalButton.isEnabled = false
                 }
+                if (mainActivityBinding.firstOperandEditText.text.toString().length  >= 3) {
+                    mainActivityBinding.undoButton.isEnabled = true
+                    mainActivityBinding.redoButton.isEnabled = true
+                }else {
+                    mainActivityBinding.undoButton.isEnabled = false
+                    mainActivityBinding.redoButton.isEnabled = false
+                }
 
             }
 

@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
 class CalculatorViewModel(application: Application) : AndroidViewModel(application)  {
     var resultMutableLiveData : MutableLiveData<Double> = MutableLiveData()
@@ -18,7 +17,7 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
 
     fun postResultToLiveData (expression :String) : MutableLiveData<Double>{
-        var result = evaluateString.getResult(expression)
+        var result = evaluateString.evaluate(expression)
         var list = reterieveListFromSharedPreference()
         list.add(expression + " = "+ result.toString())
         var set = HashSet<String>()
