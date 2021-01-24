@@ -3,14 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bordered_textview"
+    android:layout_margin="8dp"
+    >
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/historyTextView"
     android:layout_gravity="center"
     android:gravity="center"
-    android:padding="6dp"
+    android:padding="8dp"
     android:textColor="@color/black"
+    android:textSize="18sp"
+    android:text="6+9+7=99"
     />
 </LinearLayout>

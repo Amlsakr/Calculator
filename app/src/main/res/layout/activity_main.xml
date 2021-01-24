@@ -1,87 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="35dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
     <EditText
         android:id="@+id/firstOperandEditText"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="60dp"
+        android:autofillHints="non"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="@string/zero"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="10sp"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        tools:text="6÷7-8×2+962/7" />
 
     <TextView
         android:id="@+id/resultTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstOperandEditText" />
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:gravity="end|center_vertical"
+        android:padding="10dp"
+        android:text=""
+        tools:text="100" />
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/add"
         android:background="@drawable/button"
         android:onClick="getOperation"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/minusButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/minus"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="-"
         android:background="@drawable/button"
         android:onClick="getOperation"
-        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/addButton"
-        app:layout_constraintTop_toBottomOf="@+id/resultTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/multiplyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/multiply"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/button"
-        android:textSize="22sp"
-        android:textStyle="bold"
         android:onClick="getOperation"
+        android:text="@string/multiply"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/minusButton"
-        app:layout_constraintTop_toBottomOf="@+id/resultTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/openBracket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/open_bracket"
+        android:textColor="@color/white"
+        android:background="@drawable/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/multiplyButton"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/divideButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/divide"
         android:background="@drawable/button"
-        android:textSize="22sp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:onClick="getOperation"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,12 +127,13 @@
         android:id="@+id/equalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/equal"
-        android:background="@drawable/button"
-        android:textSize="22sp"
+        android:background="@drawable/equal_button"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         android:onClick="equal"
         android:enabled="false"
         app:layout_constraintStart_toEndOf="@+id/divideButton"
@@ -106,39 +143,74 @@
         android:id="@+id/undoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/undo"
         android:background="@drawable/button"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/equalButton"
         app:layout_constraintTop_toBottomOf="@+id/multiplyButton" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/closeBracketButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/close_bracket"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/undoButton"
+        app:layout_constraintTop_toBottomOf="@+id/openBracket" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/redoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/redo"
+        android:background="@drawable/button"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         android:textSize="16sp"
-        android:background="@drawable/button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divideButton" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/clear"
+        android:background="@drawable/button"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:onClick="onClearClick"
+        app:layout_constraintStart_toEndOf="@+id/redoButton"
+        app:layout_constraintTop_toBottomOf="@+id/equalButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redoButton" />
+        app:layout_constraintTop_toBottomOf="@+id/clearButton" />
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

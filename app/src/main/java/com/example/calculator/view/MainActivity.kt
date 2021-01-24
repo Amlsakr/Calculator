@@ -40,8 +40,10 @@ class MainActivity : AppCompatActivity()  {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.e("et", s.toString() + "start" + start + "before" + before + "count" + count)
                 mainActivityBinding.firstOperandEditText.setSelection(mainActivityBinding.firstOperandEditText.text.toString().length);
+                if(mainActivityBinding.firstOperandEditText.text.toString().length == 0){
+                    mainActivityBinding.equalButton.isEnabled = false
+                }
 
             }
 
@@ -73,54 +75,70 @@ class MainActivity : AppCompatActivity()  {
     }
 
     fun equal(view: View) {
-        if (mainActivityBinding.firstOperandEditText.text.toString().length > 0 ) {
-            var firstOperand = mainActivityBinding.firstOperandEditText.text.toString()
-            calculatorViewModel.postResultToLiveData(firstOperand)
+        var input = mainActivityBinding.firstOperandEditText.text.toString()
+        if (input.length > 0) {
+            if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
+                var firstOperand = mainActivityBinding.firstOperandEditText.text.toString()
+                calculatorViewModel.postResultToLiveData(firstOperand)
+            } else {
+                Toast.makeText(this, "Please Enter Valid Expression", Toast.LENGTH_SHORT).show()
+            }
         }else {
-            Toast.makeText(this , "Please Enter Operand" , Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please Enter  Expression", Toast.LENGTH_SHORT).show()
         }
         mainActivityBinding.equalButton.isEnabled = false
         hideKeyboard()
-
     }
 
     fun getOperation(view: View) {
         when(view.id){
             R.id.addButton -> {
                 mainActivityBinding.addButton.isSelected = true
-                    if (checkIfLastItemIsNumberOrOperator(mainActivityBinding.firstOperandEditText.text.toString().
-                            get(mainActivityBinding.firstOperandEditText.text.toString().length - 1).toString())) {
-                        var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.minusButton.isSelected = false
+                mainActivityBinding.multiplyButton.isSelected = false
+                mainActivityBinding.divideButton.isSelected = false
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                if(input.length> 0) {
+                    if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.add))
+                    }
                 }
             }
             R.id.multiplyButton -> {
-
                 mainActivityBinding.multiplyButton.isSelected = true
-                if (checkIfLastItemIsNumberOrOperator(mainActivityBinding.firstOperandEditText.text.toString()
-                                .get(mainActivityBinding.firstOperandEditText.text.toString().length - 1).toString())) {
-                    var input = mainActivityBinding.firstOperandEditText.text.toString()
-                    mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.multiply))
-
+                mainActivityBinding.addButton.isSelected = false
+                mainActivityBinding.minusButton.isSelected = false
+                mainActivityBinding.divideButton.isSelected = false
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                if(input.length> 0) {
+                    if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
+                        mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.multiply))
+                    }
                 }
             }
             R.id.divideButton -> {
                 mainActivityBinding.divideButton.isSelected = true
-
-                if (checkIfLastItemIsNumberOrOperator(mainActivityBinding.firstOperandEditText.text.toString()
-                                .get(mainActivityBinding.firstOperandEditText.text.toString().length - 1).toString())) {
-                        var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.multiplyButton.isSelected = false
+                mainActivityBinding.addButton.isSelected = false
+                mainActivityBinding.minusButton.isSelected = false
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                if(input.length> 0) {
+                    if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.divide))
+                    }
                 }
             }
             R.id.minusButton -> {
                 mainActivityBinding.minusButton.isSelected = true
-                if (checkIfLastItemIsNumberOrOperator(mainActivityBinding.firstOperandEditText.text.toString()
-                                .get(mainActivityBinding.firstOperandEditText.text.toString().length - 1).toString())) {
-                        var input = mainActivityBinding.firstOperandEditText.text.toString()
+                mainActivityBinding.divideButton.isSelected = false
+                mainActivityBinding.multiplyButton.isSelected = false
+                mainActivityBinding.addButton.isSelected = false
+                var input = mainActivityBinding.firstOperandEditText.text.toString()
+                if(input.length> 0) {
+                    if (checkIfLastItemIsNumberOrOperator(input.get(input.length - 1).toString())) {
                         mainActivityBinding.firstOperandEditText.setText(input + getString(R.string.minus))
-
-               }
+                    }
+                }
             }
         }
         mainActivityBinding.equalButton.isEnabled = true
@@ -138,10 +156,16 @@ class MainActivity : AppCompatActivity()  {
                     || s== "*" || s == "/"){
                 return false
             }
-
-
         return true
     }
+
+
+
+    fun onClearClick(view: View) {
+        mainActivityBinding.firstOperandEditText.text.clear()
+    }
+
+    fun onNumberClick(view: View) {}
 
 
 }
